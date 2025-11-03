@@ -1,176 +1,137 @@
 # =================================================================
-# === INSTRUCCIÓN PARA EL EQUIPO: SOLO DESCOMENTAR TU SECCIÓN ===
+# === SIMULACIÓN DE INTEGRACIÓN DEL SPRINT (REVISIÓN FINAL) ===
+# === Demuestra el INCREMENTO del trabajo de los 6 Equipos ===
 # =================================================================
 
-# Importaciones de módulos centrales (Usados por todos)
-from src.data_manager import load_accounts, save_accounts, get_account
+# Importaciones de Módulos Centrales
+from src.data_manager import get_account
 from src.core_logic import update_balance
 
-# -----------------------------------------------------------------
-# 📌 EQUIPO 1: Proceso de Onboarding Digital
-# -----------------------------------------------------------------
-# from src.modules.mod_onboarding import create_new_account, toggle_account_status, check_status
+# Importaciones de Funciones implementadas por los Equipos
+from src.modules.mod_onboarding import create_new_account
+from src.modules.mod_cards import freeze_card, unfreeze_card
+from src.modules.mod_analysis import get_total_income, get_total_expenses
+from src.modules.mod_support import log_incident, get_incident_history
+from src.modules.mod_savings import deposit_to_goal
 
-# if __name__ == "__main__":
-#     print("--- 📌 Equipo 1: Pruebas de Onboarding ---")
-#
-#     # HU 1.1 y 1.2: Probar la creación (Validación de nombre y depósito mínimo)
-#     print("\nProbando creación de cuenta...")
-#     new_id = create_new_account("Nuevo Cliente", 60.00)
-#     new_acc = get_account(new_id)
-#     print(f"Cuenta {new_id} creada: {new_acc['owner']}")
-#
-#     # HU 1.3: Probar cambio de estado (toggle_account_status)
-#     print("Cambiando estado...")
-#     toggle_account_status(new_id)
-#
-#     # HU 1.4: Probar verificación de estado (check_status)
-#     print(f"Estado de {new_id}: {'ACTIVA' if check_status(new_id) else 'INACTIVA'}")
-#
-#     print("------------------------------------------")
+# Nota: La cuenta A1001 debe existir en accounts.json y la nueva cuenta debe ser creada aquí.
+TEST_ACCOUNT_ID: str = "A1001"
+NEW_ACCOUNT_ID: str = (
+    "C100"  # ID temporal, reemplazado por la función create_new_account
+)
 
 
-# -----------------------------------------------------------------
-# 📌 EQUIPO 2: Transferencias Interbancarias Rápidas
-# -----------------------------------------------------------------
-# El Equipo 2 prueba directamente la función update_balance después de modificarla en core_logic.py
-# (No necesita importar funciones de su propio módulo, solo probar las modificaciones hechas a core_logic.py)
+def run_integration_test() -> None:
+    """
+    Ejecuta una secuencia de pruebas que cubren las funciones implementadas
+    por todos los equipos, verificando la integración.
+    """
+    print("\n==================================================")
+    print("INICIANDO REVISIÓN DE INCREMENTO (Sprint Review)")
+    print("==================================================")
 
-# if __name__ == "__main__":
-#     print("--- 📌 Equipo 2: Pruebas de Transferencias ---")
-#     # Usaremos la cuenta A1001 (balance inicial: 1500.50)
-#     ACCOUNT_ID = "A1001"
-#
-#     # HU 2.1 y 2.4: Probar límite y comisión (retiro de 1100.00)
-#     print("\nProbando retiro con límites y comisiones (debería fallar por límite o aplicar comisión si es >= 500)...")
-#     status, msg = update_balance(ACCOUNT_ID, -1100.00, "Retiro grande")
-#     print(f"Estado: {status}, Mensaje: {msg}")
-#
-#     # HU 2.3: Probar fecha dinámica (cualquier transacción exitosa)
-#     print("\nProbando transacción exitosa (verificar fecha en JSON)...")
-#     status, msg = update_balance(ACCOUNT_ID, -10.00, "Pequeño pago")
-#     print(f"Estado: {status}, Mensaje: {msg}")
-#
-#     # HU 2.2: Probar registro de error por fondos insuficientes (si balance es bajo)
-#     print("\nProbando fondos insuficientes (debería fallar)...")
-#     status, msg = update_balance(ACCOUNT_ID, -50000.00, "Retiro imposible")
-#     print(f"Estado: {status}, Mensaje: {msg}")
-#
-#     print("------------------------------------------")
+    # -----------------------------------------------------------------
+    # PRUEBA 1: EQUIPO 1 (Onboarding) - Creación de Cuenta
+    # Verifica HU 1.1, 1.2 y la inclusión de estructuras (3.1, 5.1, 6.1)
+    # -----------------------------------------------------------------
+    print("\n--- 1. Testing Onboarding (Equipo 1) ---")
 
+    # Intenta crear una cuenta (verifica validaciones de nombre y depósito mínimo)
+    status, new_id = create_new_account("Nuevo Cliente", 75.00)
+    if status:
+        global NEW_ACCOUNT_ID
+        NEW_ACCOUNT_ID = new_id
+        print(f"Éxito: Cuenta '{new_id}' creada con las estructuras necesarias.")
+    else:
+        print(f"Fallo: Onboarding fallido. Mensaje: {new_id}")
+        return  # Detener si la base no se crea
 
-# -----------------------------------------------------------------
-# 📌 EQUIPO 3: Gestión de Tarjetas Virtuales
-# -----------------------------------------------------------------
-# from src.modules.mod_cards import freeze_card, unfreeze_card, is_card_frozen
+    # -----------------------------------------------------------------
+    # PRUEBA 2: EQUIPO 3 (Tarjetas Virtuales) & EQUIPO 2 (Bloqueo 3.2)
+    # -----------------------------------------------------------------
+    print("\n--- 2. Testing Bloqueo por Tarjeta Congelada (Eq. 3 y Core Logic) ---")
 
-# if __name__ == "__main__":
-#     print("--- 📌 Equipo 3: Pruebas de Tarjetas Virtuales ---")
-#     ACCOUNT_ID = "A1001"
+    # Congela la tarjeta (HU 3.3) en la cuenta ya existente
+    freeze_card(TEST_ACCOUNT_ID)
+    acc = get_account(TEST_ACCOUNT_ID)
+    print(f"Estado de tarjeta: {acc.get('virtual_card_status')}")
 
-#     # HU 3.3: Congelar tarjeta
-#     freeze_card(ACCOUNT_ID)
-#     acc_info = get_account(ACCOUNT_ID)
-#     print(f"Estado después de congelar: {acc_info['virtual_card_status']}")
+    # Intenta una transferencia (Verifica el bloqueo implementado por HU 3.2 en core_logic.py)
+    status, msg = update_balance(
+        TEST_ACCOUNT_ID, -10.00, "Intento de Pago con tarjeta congelada"
+    )
+    if not status and "congelada" in msg:
+        print(
+            f"Éxito Integración: Bloqueo de transacción por tarjeta congelada funcionó. Mensaje: {msg}"
+        )
 
-#     # HU 3.2: Probar Bloqueo de Transacción (debería fallar)
-#     print("\nIntentando transacción con tarjeta congelada (debería fallar)...")
-#     status, msg = update_balance(ACCOUNT_ID, -50.00, "Pago de prueba")
-#     print(f"Estado de Transacción: {status}, Mensaje: {msg}")
+    unfreeze_card(TEST_ACCOUNT_ID)  # Descongela para el resto de las pruebas
 
-#     # HU 3.4: Descongelar tarjeta
-#     unfreeze_card(ACCOUNT_ID)
-#     acc_info = get_account(ACCOUNT_ID)
-#     print(f"Estado después de descongelar: {acc_info['virtual_card_status']}")
+    # -----------------------------------------------------------------
+    # PRUEBA 3: EQUIPO 2 (Transferencias) - Límites y Comisiones
+    # -----------------------------------------------------------------
+    print("\n--- 3. Testing Límites y Comisiones (Equipo 2) ---")
 
-#     # Probar que la transacción ahora funcione
-#     print("\nIntentando transacción con tarjeta activa (debería funcionar)...")
-#     status, msg = update_balance(ACCOUNT_ID, -10.00, "Pago final")
-#     print(f"Estado de Transacción: {status}, Mensaje: {msg}")
-#
-#     print("------------------------------------------")
+    # Prueba un retiro grande (Verifica límite HU 2.1 y/o comisión HU 2.4)
+    # Nota: El balance debe ser suficiente para esta prueba.
+    status, msg = update_balance(TEST_ACCOUNT_ID, -600.00, "Retiro con comisión")
+    if status:
+        print(f"Éxito: Retiro procesado (Se verificó límite/comisión). Mensaje: {msg}")
+    else:
+        print(f"Fallo: Error en retiro: {msg}")
 
+    # -----------------------------------------------------------------
+    # PRUEBA 4: EQUIPO 6 (Metas de Ahorro) & EQUIPO 2 (Bloqueo Mínimo 6.4)
+    # -----------------------------------------------------------------
+    print("\n--- 4. Testing Metas de Ahorro y Bloqueo Mínimo (Eq. 6 y Core Logic) ---")
 
-# -----------------------------------------------------------------
-# 📌 EQUIPO 4: Visualización y Análisis de Gastos
-# -----------------------------------------------------------------
-# from src.modules.mod_analysis import get_total_income, get_total_expenses, count_transactions
+    # Depósito a la meta (HU 6.2, que usa update_balance)
+    status, msg = deposit_to_goal(TEST_ACCOUNT_ID, 50.00)
+    if status:
+        print(f"Éxito: Transferencia a meta y resta de balance principal correctas.")
 
-# if __name__ == "__main__":
-#     print("--- 📌 Equipo 4: Pruebas de Análisis de Gastos ---")
-#     ACCOUNT_ID = "A1001"
-#
-#     # Las transacciones deben estar en el JSON
-#
-#     # HU 4.3: Conteo de Transacciones
-#     count = count_transactions(ACCOUNT_ID)
-#     print(f"\nTotal de transacciones: {count}")
+    # Prueba el bloqueo por saldo mínimo (HU 6.4 en core_logic.py)
+    # Se necesita un retiro que deje el balance final bajo $50.00
+    status, msg = update_balance(TEST_ACCOUNT_ID, -860.00, "Retiro que viola mínimo")
+    if not status and "mínimo" in msg:
+        print(
+            f"Éxito Integración: Bloqueo por saldo mínimo ($50.00) funcionó. Mensaje: {msg}"
+        )
 
-#     # HU 4.1: Sumar Ingresos
-#     income = get_total_income(ACCOUNT_ID)
-#     print(f"Total Ingresos: {income}")
+    # -----------------------------------------------------------------
+    # PRUEBA 5: EQUIPO 5 (Soporte)
+    # -----------------------------------------------------------------
+    print("\n--- 5. Testing Soporte (Equipo 5) ---")
 
-#     # HU 4.2: Sumar Gastos
-#     expenses = get_total_expenses(ACCOUNT_ID)
-#     print(f"Total Gastos: {expenses}")
+    # Registra un incidente (HU 5.2, 5.4)
+    log_incident(NEW_ACCOUNT_ID, "No puedo ingresar a la aplicación", priority="ALTA")
 
-#     # HU 4.4: Alerta de Sobregiro (Requiere que el Equipo 2 ya haya implementado 4.4 en core_logic)
-#     print("\nProbando alerta de sobregiro (Balance final < 10.00)...")
-#     # Ajustar la cantidad para que el balance final quede entre 0 y 10
-#     status, msg = update_balance(ACCOUNT_ID, -1495.00, "Retiro crítico")
-#     print(f"Mensaje de Transacción (Buscar Alerta): {msg}")
-#
-#     print("------------------------------------------")
+    # Consulta historial (HU 5.3)
+    history = get_incident_history(NEW_ACCOUNT_ID)
+    if history and history[0].get("priority") == "ALTA":
+        print(f"Éxito: Incidente registrado y consultado con prioridad correcta.")
 
+    # -----------------------------------------------------------------
+    # PRUEBA 6: EQUIPO 4 (Análisis)
+    # -----------------------------------------------------------------
+    print("\n--- 6. Testing Análisis y Advertencia (Equipo 4 y Core Logic) ---")
 
-# -----------------------------------------------------------------
-# 📌 EQUIPO 5: Módulo de Contacto y Soporte por Chat
-# -----------------------------------------------------------------
-# from src.modules.mod_support import log_incident, get_incident_history
+    # HU 4.1, 4.2: Cálculos
+    print(
+        f"Total Ingresos: ${get_total_income(TEST_ACCOUNT_ID)} | Total Gastos: ${get_total_expenses(TEST_ACCOUNT_ID)}"
+    )
 
-# if __name__ == "__main__":
-#     print("--- 📌 Equipo 5: Pruebas de Soporte y Chat ---")
-#     ACCOUNT_ID = "B2002"
+    # HU 4.4: Probar advertencia de saldo bajo (requiere una transacción que deje $0 < balance <= $10)
+    status, msg = update_balance(TEST_ACCOUNT_ID, -5.00, "Retiro de advertencia")
+    if status and "ADVERTENCIA" in msg:
+        print(
+            f"Éxito Integración: Advertencia de saldo bajo (HU 4.4) se disparó en Core Logic. Mensaje: {msg}"
+        )
 
-#     # HU 5.2 y 5.4: Registrar Incidentes con prioridad
-#     print("\nRegistrando incidentes...")
-#     log_incident(ACCOUNT_ID, "No puedo ingresar a la aplicación", priority="ALTA")
-#     log_incident(ACCOUNT_ID, "Consulta sobre extracto bancario")
-
-#     # HU 5.3: Visualización de Historial
-#     history = get_incident_history(ACCOUNT_ID)
-#     print(f"\nHistorial de incidentes para {ACCOUNT_ID} (total {len(history)}):")
-#     for i, inc in enumerate(history):
-#         print(f"  {i+1}. {inc.get('description')} - Prioridad: {inc.get('priority')}")
-
-#     print("------------------------------------------")
+    print("\n==================================================")
+    print("REVISIÓN DE INCREMENTO FINALIZADA.")
+    print("==================================================")
 
 
-# -----------------------------------------------------------------
-# 📌 EQUIPO 6: Metas de Ahorro Programadas
-# -----------------------------------------------------------------
-# from src.modules.mod_savings import deposit_to_goal, check_goal_achieved
-
-# if __name__ == "__main__":
-#     print("--- 📌 Equipo 6: Pruebas de Metas de Ahorro ---")
-#     ACCOUNT_ID = "A1001"
-
-#     # HU 6.1: (Asumir estructura de goal ya creada por mod_onboarding)
-#
-#     # HU 6.2: Depósito a la meta (usa update_balance internamente)
-#     print("\nDepositando $100.00 a la meta...")
-#     deposit_to_goal(ACCOUNT_ID, 100.00)
-#     acc = get_account(ACCOUNT_ID)
-#     print(f"Balance actual: {acc['balance']}, Meta actual: {acc['savings_goal']['current']}")
-
-#     # HU 6.3: Verificar logro de meta (target 0.00 por defecto, debería ser True si current > 0)
-#     is_achieved = check_goal_achieved(ACCOUNT_ID)
-#     print(f"Meta lograda?: {is_achieved}")
-
-#     # HU 6.4: Probar Requisito de Retiro (Bloqueo si balance cae por debajo de $50)
-#     print("\nProbando retiro que dejaría el balance bajo $50 (debería fallar)...")
-#     # Asumiendo que el balance es 1400.50 y el retiro es 1351.00 (deja 49.50)
-#     status, msg = update_balance(ACCOUNT_ID, -1351.00, "Retiro riesgoso")
-#     print(f"Estado de Transacción: {status}, Mensaje: {msg}")
-
-#     print("------------------------------------------")
+if __name__ == "__main__":
+    run_integration_test()

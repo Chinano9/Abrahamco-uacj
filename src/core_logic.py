@@ -1,51 +1,69 @@
-import json
+from typing import Tuple
 from datetime import datetime
-from src.data_manager import load_accounts, save_accounts, get_account
-# Importar módulos necesarios
-from src.modules import mod_cards # Necesario para la HU 3.2
+from src.data_manager import load_accounts, save_accounts, get_account, AccountDict
 
-# HU 2.1, 2.2, 2.4: SOLO MODIFICADO POR EQUIPO 2
-def update_balance(account_id, amount, description):
+# Importar las funciones de soporte de los módulos
+from src.modules import mod_cards  # Para HU 3.2
+from src.modules import mod_analysis  # Para HU 4.4
+from src.modules import mod_savings  # Para HU 6.4
+
+# EL EQUIPO 2 ES EL UNICO QUE DEBE MODIFICAR ESTE ARCHIVO, SI NO ERES DEL EQUIPO 2 ABSTENTE DE ENTRAR AQUI! NO TOQUES NADA!!!
+
+
+def update_balance(
+    account_id: str, amount: float, description: str
+) -> Tuple[bool, str]:
     """
-    Realiza una transacción, implementando la lógica de balance y seguridad.
-    *** SOLO EL EQUIPO 2 DEBE MODIFICAR ESTA FUNCIÓN PARA SUS HISTORIAS DE USUARIO. ***
+    Realiza una transacción, implementando la lógica de balance, límites y seguridad.
     """
     accounts = load_accounts()
-
-    # 1. Obtener la cuenta y realizar verificaciones
     account = get_account(account_id)
-    if not account or not account.get('is_active', False):
-        return False, "Cuenta no encontrada o inactiva."
 
-    # HU 3.2 (Implementación de mod_cards.py): Bloqueo si la tarjeta está congelada.
-    if mod_cards.is_card_frozen(account): # Llama a la lógica del Equipo 3
-         return False, "Error: Tarjeta virtual congelada. No se permite la transacción."
+    # ... Verificación inicial de existencia/actividad ...
 
-    # >>> START: Zona de trabajo principal del EQUIPO 2 (Límites, Comisiones, etc.)
-    # HU 2.1: Límite Diario. HU 2.4: Comisión por Retiro.
-    # >>> END: Zona de trabajo principal del EQUIPO 2
+    # === CONEXIÓN CON EQUIPO 3 (HU 3.2: Bloqueo de Tarjeta Congelada) ===
+    # if mod_cards.is_card_frozen(account): ...
 
-    new_balance = account['balance'] + amount
+    # >>> START: ZONA DE TRABAJO PRINCIPAL DEL EQUIPO 2 (HU 2.1, 2.2, 2.3, 2.4)
 
-    # HU 6.4 (Implementación de mod_savings.py): Bloqueo por balance mínimo después del retiro.
-    # if not mod_savings.check_minimum_balance(new_balance): ...
+    # HU 2.1: Implementar Límite Diario aquí
+    # HU 2.4: Implementar Comisión por Retiro aquí
+
+    # >>> END: ZONA DE TRABAJO PRINCIPAL DEL EQUIPO 2
+
+    new_balance: float = account["balance"] + amount
+
+    # === CONEXIÓN CON EQUIPO 6 (HU 6.4: Requisito de Balance Mínimo) ===
+    # Si es un retiro (amount < 0), llamar a la verificación del Equipo 6.
+    # is_valid, error_msg = mod_savings.check_minimum_balance_rule(new_balance)
+    # if not is_valid: return False, error_msg
 
     if new_balance < 0:
-        # HU 2.2: Registro de error por fondos insuficientes
+        # HU 2.2: Implementar registro de error por fondos insuficientes aquí
         return False, "Fondos insuficientes para la transacción."
 
     # 2. Actualizar y guardar
     for acc in accounts:
-        if acc['id'] == account_id:
-            acc['balance'] = new_balance
-            acc['transactions'].append({
-                "date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                "amount": amount,
-                "description": description,
-                "category": "Sin Asignar" # Campo por defecto, puede ser usado por Equipo 4
-            })
+        if acc["id"] == account_id:
+            acc["balance"] = new_balance
+
+            # HU 2.3: Implementar fecha dinámica aquí
+            transaction_date: str = "FECHA-DINÁMICA-AQUÍ"
+
+            acc["transactions"].append(
+                {
+                    "date": transaction_date,
+                    "amount": amount,
+                    "description": description,
+                    "category": "Sin Asignar",
+                }
+            )
             save_accounts(accounts)
-            # HU 4.4: Alerta de Sobregiro.
+
+            # === CONEXIÓN CON EQUIPO 4 (HU 4.4: Alerta de Sobregiro) ===
+            # warning_msg: Optional[str] = mod_analysis.check_low_balance_warning(new_balance)
+            # if warning_msg: return True, f"Transacción exitosa. {warning_msg} Nuevo balance: {new_balance}"
+
             return True, "Transacción exitosa. Nuevo balance: {}".format(new_balance)
 
     return False, "Error desconocido al actualizar."
