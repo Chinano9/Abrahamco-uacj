@@ -4,7 +4,17 @@ from src.data_manager import get_account
 
 def get_total_income(account_id: str) -> float:
     """HU 4.1: Suma solo las transacciones positivas (ingresos)."""
-    pass
+    account = get_account(account_id)
+
+    if not account or "transactions" not in account:
+        return 0.0
+    
+    total_income = 0.0
+    for transaction in account["transactions"]:
+        if transaction["amount"] > 0:
+            total_income += transaction["amount"]
+    
+    return total_income
 
 
 def get_total_expenses(account_id: str) -> float:
