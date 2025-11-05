@@ -22,4 +22,9 @@ def check_low_balance_warning(new_balance: float) -> Optional[str]:
     HU 4.4: Verifica si el nuevo balance está entre $0.01 y $10.00.
     Retorna el mensaje de advertencia si se cumple, None si no. Llamada por core_logic.
     """
-    pass
+
+    if new_balance >= 0.01 and new_balance <=10.00:
+        print("Balance bajo")
+    else:
+        return None
+    
