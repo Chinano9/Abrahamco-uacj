@@ -36,7 +36,10 @@ def get_total_expenses(account_id: str) -> float:
 
 def count_transactions(account_id: str) -> int:
     """HU 4.3: Devuelve el número total de transacciones."""
-    pass
+    account = get_account(account_id)
+    if account:
+        return len(account.get("transactions", []))
+    return 0
 
 
 def check_low_balance_warning(new_balance: float) -> Optional[str]:
