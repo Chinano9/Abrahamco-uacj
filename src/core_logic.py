@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Optional, Tuple
 from datetime import datetime
 from src.data_manager import load_accounts, save_accounts, get_account, AccountDict
 
@@ -61,8 +61,8 @@ def update_balance(
             save_accounts(accounts)
 
             # === CONEXIÓN CON EQUIPO 4 (HU 4.4: Alerta de Sobregiro) ===
-            # warning_msg: Optional[str] = mod_analysis.check_low_balance_warning(new_balance)
-            # if warning_msg: return True, f"Transacción exitosa. {warning_msg} Nuevo balance: {new_balance}"
+            warning_msg: Optional[str] = mod_analysis.check_low_balance_warning(new_balance)
+            if warning_msg: return True, f"Transacción exitosa. {warning_msg} Nuevo balance: {new_balance}"
 
             return True, "Transacción exitosa. Nuevo balance: {}".format(new_balance)
 
