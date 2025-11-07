@@ -71,7 +71,8 @@ if __name__ == "__main__":
         # Monkeypatch local: las funciones usadas por log_incident buscarán
         # los nombres en el namespace global de este módulo.
         globals()["load_accounts"] = lambda: accounts
-        globals()["save_accounts"] = lambda a: accounts.clear() or accounts.extend(a)
+        #globals()["save_accounts"] = lambda a: accounts.clear() or accounts.extend(a)
+        globals()["save_accounts"] = lambda a: None  # No hace nada en memoria
 
         print("=" * 50)
         print("PRUEBA EN MEMORIA: log_incident con test_data")
