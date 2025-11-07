@@ -39,9 +39,17 @@ def log_incident(
 
 def get_incident_history(account_id: str) -> List[Dict[str, Any]]:
     """HU 5.3: Devuelve la lista de incidentes registrados."""
-    # El equipo debe implementar la lógica
-    pass
+    # Cargar todas las cuentas
+    accounts = load_accounts()
 
+    for acc in accounts: 
+        if acc.get("id") == account_id:
+            # Verificar que tenga incidentes
+            incidents = acc.get("incidents", [])
+            # Retorna la lista de incidentes vacia si no hay alguna
+            return incidents
+    # En caso de que no se encuentra la cuenta
+    return []
 
 if __name__ == "__main__":
     # ZONA DE PRUEBA: Usando el mock para asegurar que el campo 'incidents' existe.
@@ -87,6 +95,18 @@ if __name__ == "__main__":
         print("[Prueba 3] Incidente en cuenta inexistente:")
         ok, res = log_incident("NOEXISTE", "Test", "ALTA")
         print(f"log_incident -> Éxito: {ok}, Mensaje: {res}\n")
+
+        # Prueba 4: Obtener el historial de incidentes de una cuenta existente
+        print("[Prueba 4] Historia de incidentes para cuentas existentes:")
+        history = get_incident_history("B2002")
+        print(f"get_incident_history -> Total incidentes: {len(history)} incidentes encontrados")
+        for i, inc in enumerate(history, 1):
+            print(f" Incidente {i}: {inc['description']} | (Prioridad: {inc['priority']}, Estado: {inc['status']})\n")
+
+        # Prueba 5: Obtener el historial de incidentes de una cuenta inexistente
+        print("[Prueba 5] Historia de incidentes para cuenta inexistente:")
+        history = get_incident_history("NOEXISTE")
+        print(f"get_incident_history -> Total incidentes: {len(history)} incidentes encontrados\n")
 
     finally:
         # Restaurar funciones originales
