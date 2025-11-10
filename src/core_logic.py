@@ -31,6 +31,16 @@ def update_balance(
         return False, "La transacción excede el límite de $1000.00 y ha sido rechazada."
     # HU 2.4: Implementar Comisión por Retiro aquí
 
+    # Definimos la comisión
+    COMMISSION_FEE: float = 5.00
+    
+    # Si el retiro (que es un 'amount' negativo) es de 500 o más
+    if amount <= -500.00:
+        # Hacemos el 'amount' más negativo para incluir la comisión.
+        # Ej: -600.00 (retiro) - 5.00 (comisión) = -605.00 (total a restar)
+        amount = amount - COMMISSION_FEE
+        # Opcional: puedes imprimir un log para depuración
+        print(f"LOG: Comisión de ${COMMISSION_FEE} aplicada.")
     # >>> END: ZONA DE TRABAJO PRINCIPAL DEL EQUIPO 2
 
     new_balance: float = account["balance"] + amount
@@ -51,7 +61,7 @@ def update_balance(
             acc["balance"] = new_balance
 
             # HU 2.3: Implementar fecha dinámica aquí
-            transaction_date: str = "FECHA-DINÁMICA-AQUÍ"
+            transaction_date: str = datetime.now().isoformat()
 
             acc["transactions"].append(
                 {
