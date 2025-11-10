@@ -27,6 +27,8 @@ def update_balance(
     # >>> START: ZONA DE TRABAJO PRINCIPAL DEL EQUIPO 2 (HU 2.1, 2.2, 2.3, 2.4)
 
     # HU 2.1: Implementar Límite Diario aquí
+    if amount <= -1000.00:
+        return False, "La transacción excede el límite de $1000.00 y ha sido rechazada."
     # HU 2.4: Implementar Comisión por Retiro aquí
 
     # >>> END: ZONA DE TRABAJO PRINCIPAL DEL EQUIPO 2
