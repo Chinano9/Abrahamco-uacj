@@ -42,6 +42,7 @@ def update_balance(
 
     if new_balance < 0:
         # HU 2.2: Implementar registro de error por fondos insuficientes aquí
+        print(f"Error: Fondos insuficientes para la cuenta ID: {account['id']}")
         return False, "Fondos insuficientes para la transacción."
 
     # 2. Actualizar y guardar
