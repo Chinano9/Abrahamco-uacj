@@ -1,27 +1,203 @@
 [
-  {
-    "id": "A1001",
-    "owner": "Maria Garcia",
-    "balance": 1500.5,
-    "is_active": true,
-    "transactions": [
-      {
-        "date": "2025-10-25",
-        "amount": -200.0,
-        "description": "Compra Amazon"
-      },
-      {
-        "date": "2025-10-28",
-        "amount": 500.0,
-        "description": "Deposito Salario"
-      }
-    ]
-  },
-  {
-    "id": "B2002",
-    "owner": "Juan Perez",
-    "balance": 50.0,
-    "is_active": false,
-    "transactions": []
-  }
+    {
+        "id": "A1001",
+        "owner": "Maria Garcia",
+        "balance": 375.0,
+        "is_active": true,
+        "transactions": [
+            {
+                "date": "2025-10-25",
+                "amount": -200.0,
+                "description": "Compra Amazon"
+            },
+            {
+                "date": "2025-10-28",
+                "amount": 500.0,
+                "description": "Deposito Salario"
+            },
+            {
+                "date": "FECHA-DIN\u00c1MICA-AQU\u00cd",
+                "amount": -10.0,
+                "description": "Intento de Pago con tarjeta congelada",
+                "category": "Sin Asignar"
+            },
+            {
+                "date": "FECHA-DIN\u00c1MICA-AQU\u00cd",
+                "amount": -600.0,
+                "description": "Retiro con comisi\u00f3n",
+                "category": "Sin Asignar"
+            },
+            {
+                "date": "FECHA-DIN\u00c1MICA-AQU\u00cd",
+                "amount": -10.0,
+                "description": "Intento de Pago con tarjeta congelada",
+                "category": "Sin Asignar"
+            },
+            {
+                "date": "FECHA-DIN\u00c1MICA-AQU\u00cd",
+                "amount": -600.0,
+                "description": "Retiro con comisi\u00f3n",
+                "category": "Sin Asignar"
+            },
+            {
+                "date": "FECHA-DIN\u00c1MICA-AQU\u00cd",
+                "amount": -10.0,
+                "description": "Intento de Pago con tarjeta congelada",
+                "category": "Sin Asignar"
+            },
+            {
+                "date": "FECHA-DIN\u00c1MICA-AQU\u00cd",
+                "amount": -10.0,
+                "description": "Intento de Pago con tarjeta congelada",
+                "category": "Sin Asignar"
+            },
+            {
+                "date": "2025-11-09T20:39:36.992607",
+                "amount": -10.0,
+                "description": "Intento de Pago con tarjeta congelada",
+                "category": "Sin Asignar"
+            },
+            {
+                "date": "2025-11-09T20:39:58.530891",
+                "amount": -10.0,
+                "description": "Intento de Pago con tarjeta congelada",
+                "category": "Sin Asignar"
+            },
+            {
+                "date": "2025-11-09T20:39:58.565527",
+                "amount": -200.0,
+                "description": "Retiro con comisi\u00f3n",
+                "category": "Sin Asignar"
+            },
+            {
+                "date": "2025-11-09T20:46:56.265850",
+                "amount": -10.0,
+                "description": "Intento de Pago con tarjeta congelada",
+                "category": "Sin Asignar"
+            },
+            {
+                "date": "2025-11-09T20:46:56.299121",
+                "amount": -605.0,
+                "description": "Retiro con comisi\u00f3n",
+                "category": "Sin Asignar"
+            },
+            {
+                "date": "2025-11-09T20:49:29.358999",
+                "amount": -10.0,
+                "description": "Intento de Pago con tarjeta congelada",
+                "category": "Sin Asignar"
+            }
+        ]
+    },
+    {
+        "id": "B2002",
+        "owner": "Juan Perez",
+        "balance": 50.0,
+        "is_active": false,
+        "transactions": []
+    },
+    {
+        "id": "C102",
+        "owner": "Nuevo Cliente",
+        "balance": 75.0,
+        "is_active": true,
+        "virtual_card_status": "ACTIVA",
+        "incidents": [],
+        "savings_goal": {
+            "target": 0.0,
+            "current": 0.0
+        },
+        "transactions": []
+    },
+    {
+        "id": "C103",
+        "owner": "Nuevo Cliente",
+        "balance": 75.0,
+        "is_active": true,
+        "virtual_card_status": "ACTIVA",
+        "incidents": [],
+        "savings_goal": {
+            "target": 0.0,
+            "current": 0.0
+        },
+        "transactions": []
+    },
+    {
+        "id": "C104",
+        "owner": "Nuevo Cliente",
+        "balance": 75.0,
+        "is_active": true,
+        "virtual_card_status": "ACTIVA",
+        "incidents": [],
+        "savings_goal": {
+            "target": 0.0,
+            "current": 0.0
+        },
+        "transactions": []
+    },
+    {
+        "id": "C105",
+        "owner": "Nuevo Cliente",
+        "balance": 75.0,
+        "is_active": true,
+        "virtual_card_status": "ACTIVA",
+        "incidents": [],
+        "savings_goal": {
+            "target": 0.0,
+            "current": 0.0
+        },
+        "transactions": []
+    },
+    {
+        "id": "C106",
+        "owner": "Nuevo Cliente",
+        "balance": 75.0,
+        "is_active": true,
+        "virtual_card_status": "ACTIVA",
+        "incidents": [],
+        "savings_goal": {
+            "target": 0.0,
+            "current": 0.0
+        },
+        "transactions": []
+    },
+    {
+        "id": "C107",
+        "owner": "Nuevo Cliente",
+        "balance": 75.0,
+        "is_active": true,
+        "virtual_card_status": "ACTIVA",
+        "incidents": [],
+        "savings_goal": {
+            "target": 0.0,
+            "current": 0.0
+        },
+        "transactions": []
+    },
+    {
+        "id": "C108",
+        "owner": "Nuevo Cliente",
+        "balance": 75.0,
+        "is_active": true,
+        "virtual_card_status": "ACTIVA",
+        "incidents": [],
+        "savings_goal": {
+            "target": 0.0,
+            "current": 0.0
+        },
+        "transactions": []
+    },
+    {
+        "id": "C109",
+        "owner": "Nuevo Cliente",
+        "balance": 75.0,
+        "is_active": true,
+        "virtual_card_status": "ACTIVA",
+        "incidents": [],
+        "savings_goal": {
+            "target": 0.0,
+            "current": 0.0
+        },
+        "transactions": []
+    }
 ]
